@@ -61,13 +61,13 @@ def message_received(client, server, message):
             places_obj = scraper.scrape_places(place_data, cache=True)
             with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
                 if (res['option']['select_by'] == 'date'):
-                    result = r_scraper.scrape_reviews(
-                        url=places_obj["places"][0]["link"], n_reviews=5, hl="French", sort_by=Gmaps.NEWEST
+                    result = r_scraper.scrape_reviews_by_date(
+                        url=places_obj["places"][0]["link"], date_reviews=res['option']['select_value'], hl="fr",
+                        sort_by=Gmaps.NEWEST
                     )
                 else:
-                    result = r_scraper.scrape_reviews_by_date(
-                        url=places_obj["places"][0]["link"], date_reviews="il y a un mois", hl="fr",
-                        sort_by=Gmaps.NEWEST
+                    result = r_scraper.scrape_reviews(
+                        url=places_obj["places"][0]["link"], n_reviews=res['option']['select_value'], hl="French", sort_by=Gmaps.NEWEST
                     )
             reviews = scraper.process_reviews(result, False)
             insert_review = (

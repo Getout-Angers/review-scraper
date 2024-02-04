@@ -58,9 +58,9 @@ def message_received(client, server, message):
             place_data = {'query': 'Get Out Angers - Escape Game et Expériences Immersives 🔒 | Bar à Jeux 🎲',
                           'is_spending_on_ads': False, 'max': 1, 'lang': 'fr', 'geo_coordinates': None,
                           'zoom': None, 'convert_to_english': True, 'server': server, 'client': client}
-            #places_obj = scraper.scrape_places(place_data, cache=True)
+            places_obj = scraper.scrape_places(place_data, cache=True)
             server.send_message(client, "step_3")
-            '''with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
+            with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
                 if (res['option']['select_by'] == 'date'):
                     result = r_scraper.scrape_reviews_by_date(
                         url=places_obj["places"][0]["link"], date_reviews=res['option']['select_value'], hl="fr",
@@ -80,7 +80,7 @@ def message_received(client, server, message):
                 cur_insert.execute(insert_review, (
                     res['user_id'], session_id, review['review_author'], review['rating'],
                     review['published_at'], review['review_text']))
-                i += 1'''
+                i += 1
             response['result']['nb_review'] = i
             db_connection.commit()
             server.send_message(client, json.dumps(response))

@@ -204,14 +204,11 @@ def add_arguments(data, options):
     headless=True,
     output=None,
 )
-def scrape_places(driver: AntiDetectDriver, data):
+def scrape_places(driver: AntiDetectDriver, data, test):
     # This fixes consent Issues in Countries like Spain
-    try :
-        server = data['server']
-        client = data['client']
-    except KeyError as e:
-        server = None
-        client = None
+    print(test)
+    server = None
+    client = None
     max_results = data['max']
     is_spending_on_ads = data['is_spending_on_ads']
 

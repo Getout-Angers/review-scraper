@@ -204,7 +204,7 @@ def add_arguments(data, options):
     headless=True,
     output=None,
 )
-def scrape_places(driver: AntiDetectDriver, data, test):
+def scrape_places(driver: AntiDetectDriver, data, test="nothing"):
     # This fixes consent Issues in Countries like Spain
     print(test)
     server = None

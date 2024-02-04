@@ -57,7 +57,7 @@ def message_received(client, server, message):
             }
             place_data = {'query': 'Get Out Angers - Escape Game et Expériences Immersives 🔒 | Bar à Jeux 🎲',
                           'is_spending_on_ads': False, 'max': 1, 'lang': 'fr', 'geo_coordinates': None,
-                          'zoom': None, 'convert_to_english': True, 'client': client, 'server': server}
+                          'zoom': None, 'convert_to_english': True}
             places_obj = scraper.scrape_places(place_data, cache=True)
             server.send_message(client, "step_3")
             with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
@@ -90,7 +90,7 @@ def message_received(client, server, message):
 PORT = 5000
 # IP = requests.get("https://ident.me").text
 IP = "217.160.10.62"
-server = WebsocketServer(host=IP, port=PORT, loglevel=logging.INFO, key="/etc/certificate/_.competition-analyzer.fr_private_key.key", cert="/etc/certificate/competition-analyzer.fr_ssl_certificate.cer")
-server.set_fn_new_client(new_client)
-server.set_fn_message_received(message_received)
-server.run_forever()
+ws_server = WebsocketServer(host=IP, port=PORT, loglevel=logging.INFO, key="/etc/certificate/_.competition-analyzer.fr_private_key.key", cert="/etc/certificate/competition-analyzer.fr_ssl_certificate.cer")
+ws_server.set_fn_new_client(new_client)
+ws_server.set_fn_message_received(message_received)
+ws_server.run_forever()

@@ -1,14 +1,6 @@
 import urllib.parse
-from botasaurus import *
+from botasaurus import AntiDetectDriver
 
-
-def add_arguments(data, options):
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--headless')
-
-
-@browser(headless=True, add_arguments=add_arguments)
 def perform_visit(driver: AntiDetectDriver, link:str):
     def visit_gmap_with_consent():
                     driver.organic_get(link, accept_cookies=True)

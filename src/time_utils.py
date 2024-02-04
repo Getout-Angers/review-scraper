@@ -48,6 +48,7 @@ relative_date_maps = {
     "fr": {
         "one_regex": r"une?",
         "ago_regex": r"^il y a\W",
+        "now": "à l'instant",
         "time_unit": {
             "an": "years",
             "ans": "years",
@@ -84,6 +85,9 @@ def parse_relative_date(relative_date, retrieval_date, hl="en"):
     """Transforma data relativa do google maps em datetime"""
     if (not isinstance(relative_date, str)) or relative_date == "":
         return None
+
+    if relative_date == relative_date_maps[hl]["now"]:
+        return retrieval_date
     # Normaliza texto
     unidecoded_text = unidecode(relative_date).lower().strip()
     text = unidecoded_text

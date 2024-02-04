@@ -28,6 +28,7 @@ relative_date_maps = {
     "en": {
         "one_regex": r"^a",
         "ago_regex": r"\s*ago$",  # Corrected regex for "ago"
+        "now": "now",
         "time_unit": {
             "year": "years",
             "years": "years",

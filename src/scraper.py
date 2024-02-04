@@ -290,9 +290,8 @@ def scrape_places(driver: AntiDetectDriver, data, client=None, server=None):
                             sleep(sleep_time)
     
     search_link = create_search_link(data['query'], data['lang'], data['geo_coordinates'], data['zoom'])
-    if server is not None:
-        print("step_1")
-        server.send_message(client, "step_1")
+    print("step_1")
+    server.send_message(client, "step_1")
     perform_visit(driver, search_link)
     if server is not None:
         print("step_2")

@@ -43,50 +43,47 @@ def message_received(client, server, message):
     print("Client(%d) search:\n%s" % (client['id'], message))
     if is_json(message):
         res = json.loads(message)
-        try:
-            if res['action'] == 'get_review':
-                db_connection = mysql.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
-                cur_insert = db_connection.cursor(buffered=True)
-                session_id = get_session_id(res['user_id'])
-                response = {
-                    "result": {
-                        "user_id": res['user_id'],
-                        "session_id": session_id,
-                        "nb_review": 0
-                    },
-                    "status": "OK",
-                }
-                place_data = {'query': 'Get Out Angers - Escape Game et Expériences Immersives 🔒 | Bar à Jeux 🎲',
-                              'is_spending_on_ads': False, 'max': 1, 'lang': 'fr', 'geo_coordinates': None,
-                              'zoom': None, 'convert_to_english': True}
-                places_obj = scraper.scrape_places(place_data, cache=True)
-                with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
-                    if (res['option']['select_by'] == 'date'):
-                        result = r_scraper.scrape_reviews(
-                            url=places_obj["places"][0]["link"], n_reviews=5, hl="French", sort_by=Gmaps.NEWEST
-                        )
-                    else:
-                        result = r_scraper.scrape_reviews_by_date(
-                            url=places_obj["places"][0]["link"], date_reviews="il y a un mois", hl="fr",
-                            sort_by=Gmaps.NEWEST
-                        )
-                reviews = scraper.process_reviews(result, False)
-                insert_review = (
-                    "INSERT INTO review (user_id, session_id, author_name, rating, relative_time_description, text) "
-                    "VALUES (%s, %s, %s, %s, %s, %s)")
-                i = 0
-                server.send_message(client, "step_6")
-                for review in reviews:
-                    cur_insert.execute(insert_review, (
-                        res['user_id'], session_id, review['review_author'], review['rating'],
-                        review['published_at'], review['review_text']))
-                    i += 1
-                response['result']['nb_review'] = i
-                db_connection.commit()
-                server.send_message(client, json.dumps(response))
-                db_connection.close()
-        except:
-            server.send_message(client, json.dumps({ "status": "ERROR" }))
+        if res['action'] == 'get_review':
+            db_connection = mysql.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
+            cur_insert = db_connection.cursor(buffered=True)
+            session_id = get_session_id(res['user_id'])
+            response = {
+                "result": {
+                    "user_id": res['user_id'],
+                    "session_id": session_id,
+                    "nb_review": 0
+                },
+                "status": "OK",
+            }
+            place_data = {'query': 'Get Out Angers - Escape Game et Expériences Immersives 🔒 | Bar à Jeux 🎲',
+                          'is_spending_on_ads': False, 'max': 1, 'lang': 'fr', 'geo_coordinates': None,
+                          'zoom': None, 'convert_to_english': True}
+            places_obj = scraper.scrape_places(place_data, cache=True)
+            with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
+                if (res['option']['select_by'] == 'date'):
+                    result = r_scraper.scrape_reviews(
+                        url=places_obj["places"][0]["link"], n_reviews=5, hl="French", sort_by=Gmaps.NEWEST
+                    )
+                else:
+                    result = r_scraper.scrape_reviews_by_date(
+                        url=places_obj["places"][0]["link"], date_reviews="il y a un mois", hl="fr",
+                        sort_by=Gmaps.NEWEST
+                    )
+            reviews = scraper.process_reviews(result, False)
+            insert_review = (
+                "INSERT INTO review (user_id, session_id, author_name, rating, relative_time_description, text) "
+                "VALUES (%s, %s, %s, %s, %s, %s)")
+            i = 0
+            server.send_message(client, "step_6")
+            for review in reviews:
+                cur_insert.execute(insert_review, (
+                    res['user_id'], session_id, review['review_author'], review['rating'],
+                    review['published_at'], review['review_text']))
+                i += 1
+            response['result']['nb_review'] = i
+            db_connection.commit()
+            server.send_message(client, json.dumps(response))
+            db_connection.close()
 
 
 PORT = 5000

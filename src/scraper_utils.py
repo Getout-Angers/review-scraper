@@ -1,6 +1,12 @@
 import urllib.parse
-from botasaurus import AntiDetectDriver
+from botasaurus import *
 
+
+def add_arguments(data, options):
+    options.add_argument('--server')
+
+
+@browser(headless=True, add_arguments=add_arguments)
 def perform_visit(driver: AntiDetectDriver, link:str):
     def visit_gmap_with_consent():
                     driver.organic_get(link, accept_cookies=True)

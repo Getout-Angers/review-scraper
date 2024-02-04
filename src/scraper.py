@@ -204,21 +204,20 @@ def add_arguments(data, options):
     headless=True,
     output=None,
 )
-def scrape_places(driver: AntiDetectDriver, data):
-    
-    # This fixes consent Issues in Countries like Spain 
+def scrape_places(driver: AntiDetectDriver, data, client=None, server=None):
+    # This fixes consent Issues in Countries like Spain
+    start_time_log = time()
     max_results = data['max']
     is_spending_on_ads = data['is_spending_on_ads']
-    convert_to_english = data['convert_to_english']
 
     scrape_place_obj: AsyncQueueResult = scrape_place()
 
     sponsored_links = None
-    def get_sponsored_links():
-         nonlocal sponsored_links
-         if sponsored_links is None:
-              sponsored_links = driver.execute_file('get_sponsored_links.js')
-         return sponsored_links
+    #def get_sponsored_links():
+    #     nonlocal sponsored_links
+    #     if sponsored_links is None:
+    #          sponsored_links = driver.execute_file('get_sponsored_links.js')
+    #     return sponsored_links
 
 
 
@@ -254,9 +253,9 @@ def scrape_places(driver: AntiDetectDriver, data):
                                 '[role="feed"] >  div > div > a', bt.Wait.LONG))[:max_results]
                                                     
                         
-                        if is_spending_on_ads:
-                            scrape_place_obj.put(get_sponsored_links())
-                            return 
+                        #if is_spending_on_ads:
+                        #    scrape_place_obj.put(get_sponsored_links())
+                        #    return
                             
                         scrape_place_obj.put(links)
 
@@ -291,8 +290,11 @@ def scrape_places(driver: AntiDetectDriver, data):
                             sleep(sleep_time)
     
     search_link = create_search_link(data['query'], data['lang'], data['geo_coordinates'], data['zoom'])
-    
+    if server is not None:
+        server.send_message(client, "step_1")
     perform_visit(driver, search_link)
+    if server is not None:
+        server.send_message(client, "step_2")
     
     set_cookies(driver.get_cookies_dict())
     
@@ -332,21 +334,22 @@ def scrape_places(driver: AntiDetectDriver, data):
 
 
     places = scrape_place_obj.get()
-
+    if server is not None:
+        server.send_message(client, "step_3")
     hasnone = False
     for place in places:
       if place is None:
         hasnone = True
         break
     
-    places = bt.remove_nones(places)
+    #places = bt.remove_nones(places)
 
 
-    sponsored_links = get_sponsored_links() 
-    places = merge_sponsored_links(places, sponsored_links)
+    #sponsored_links = get_sponsored_links()
+    #places = merge_sponsored_links(places, sponsored_links)
     
-    if convert_to_english:
-        places = convert_unicode_dict_to_ascii_dict(places)
+    #if convert_to_english:
+    #    places = convert_unicode_dict_to_ascii_dict(places)
 
     result = {"query": data['query'], "places": places}
     
@@ -355,7 +358,6 @@ def scrape_places(driver: AntiDetectDriver, data):
 
     if hasnone:
         return DontCache(result)
-
     return result 
 
 # python -m src.scraper

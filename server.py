@@ -58,7 +58,7 @@ def message_received(client, server, message):
             place_data = {'query': 'Get Out Angers - Escape Game et Expériences Immersives 🔒 | Bar à Jeux 🎲',
                           'is_spending_on_ads': False, 'max': 1, 'lang': 'fr', 'geo_coordinates': None,
                           'zoom': None, 'convert_to_english': True}
-            places_obj = scraper.scrape_places(place_data, cache=True)
+            places_obj = scraper.scrape_places(place_data, cache=True, client=client, server=server)
             with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
                 if (res['option']['select_by'] == 'date'):
                     result = r_scraper.scrape_reviews_by_date(

@@ -59,7 +59,7 @@ def message_received(client, server, message):
                           'is_spending_on_ads': False, 'max': 1, 'lang': 'fr', 'geo_coordinates': None,
                           'zoom': None, 'convert_to_english': True}
             places_obj = scraper.scrape_places(place_data, cache=True, client=client, server=server)
-            server.send_message("step_3")
+            server.send_message(client, "step_3")
             with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
                 if (res['option']['select_by'] == 'date'):
                     result = r_scraper.scrape_reviews_by_date(

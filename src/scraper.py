@@ -290,10 +290,10 @@ def scrape_places(driver: AntiDetectDriver, data, client=None, server=None):
     
     search_link = create_search_link(data['query'], data['lang'], data['geo_coordinates'], data['zoom'])
     if server is not None:
-        server.send_message("step_1")
+        server.send_message(client, "step_1")
     perform_visit(driver, search_link)
     if server is not None:
-        server.send_message("step_2")
+        server.send_message(client, "step_2")
     
     set_cookies(driver.get_cookies_dict())
     
@@ -333,8 +333,6 @@ def scrape_places(driver: AntiDetectDriver, data, client=None, server=None):
 
 
     places = scrape_place_obj.get()
-    if server is not None:
-        server.send_message("step_3")
     hasnone = False
     for place in places:
       if place is None:

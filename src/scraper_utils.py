@@ -5,6 +5,7 @@ from botasaurus import *
 def add_arguments(data, options):
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--no-sandbox')
+    options.add_argument('--remote-debugging-pipe')
 
 
 @browser(headless=True, add_arguments=add_arguments)

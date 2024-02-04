@@ -579,7 +579,7 @@ class GoogleMapsAPIScraper:
                 break
             if j >= review_count / 3 * step_ind:
                 if server is not None:
-                    server.send_message(client, f"step_{3 + step_ind}")
+                    server.send_message(client, f"step_{2 + step_ind}")
                 step_ind += 1
             # Waiting so google wont block this scraper
             time.sleep(self.request_interval)
@@ -679,7 +679,7 @@ class GoogleMapsAPIScraper:
             i += 1
             if j >= review_count / 3 * step_ind:
                 if server is not None:
-                    server.send_message(client, f"step_{3 + step_ind}")
+                    server.send_message(client, f"step_{2 + step_ind}")
                 step_ind += 1
 
         return results

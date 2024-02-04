@@ -64,11 +64,12 @@ def message_received(client, server, message):
                 if (res['option']['select_by'] == 'date'):
                     result = r_scraper.scrape_reviews_by_date(
                         url=places_obj["places"][0]["link"], date_reviews=res['option']['select_value'], hl="fr",
-                        sort_by=Gmaps.NEWEST
+                        sort_by=Gmaps.NEWEST, server=server, client=client
                     )
                 else:
                     result = r_scraper.scrape_reviews(
-                        url=places_obj["places"][0]["link"], n_reviews=res['option']['select_value'], hl="French", sort_by=Gmaps.NEWEST
+                        url=places_obj["places"][0]["link"], n_reviews=res['option']['select_value'], hl="French", sort_by=Gmaps.NEWEST,
+                        server=server, client=client
                     )
             reviews = scraper.process_reviews(result, False)
             insert_review = (

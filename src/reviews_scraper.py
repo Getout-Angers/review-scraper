@@ -501,6 +501,8 @@ class GoogleMapsAPIScraper:
         hl: str = "en",
         sort_by: str = "",
         token: str = "",
+        server = None,
+        client = None,
     ):
         """Scrape specified amount of reviews of a place, appending results in csv"""
         url_name = re.findall("(?<=place/).*?(?=/)", url)[0]
@@ -512,6 +514,7 @@ class GoogleMapsAPIScraper:
         sort_by_id = self._parse_sort_by(sort_by)
 
         results = []
+        step_ind = 1
         j = 0
 
         n_requests = math.ceil((n_reviews) / 10)
@@ -574,7 +577,10 @@ class GoogleMapsAPIScraper:
             if review_count < 10 or token == "":
                 
                 break
-
+            if j >= review_count / 3 * step_ind:
+                if server is not None:
+                    server.send_message(client, f"step_{3 + step_ind}")
+                step_ind += 1
             # Waiting so google wont block this scraper
             time.sleep(self.request_interval)
 
@@ -590,6 +596,8 @@ class GoogleMapsAPIScraper:
             hl: str = "en",
             sort_by: str = "",
             token: str = "",
+            server = None,
+            client = None,
     ):
         """Scrape specified amount of reviews of a place, appending results in csv"""
         url_name = re.findall("(?<=place/).*?(?=/)", url)[0]
@@ -600,8 +608,10 @@ class GoogleMapsAPIScraper:
         sort_by_id = self._parse_sort_by(sort_by)
 
         results = []
+        step_ind = 1
         j = 0
         i = 0
+        review_count = 300
 
         end = False
 
@@ -651,7 +661,6 @@ class GoogleMapsAPIScraper:
                     #
                     result = self._parse_review(review, hl)
                     result["token"] = token
-
                     results.append(result)
                     #
                     if parse_relative_date(results[-1]["relative_date"], results[-1]["retrieval_date"], hl) <= parse_relative_date(date_reviews, results[-1]["retrieval_date"], hl):
@@ -668,6 +677,10 @@ class GoogleMapsAPIScraper:
             # Waiting so google wont block this scraper
             time.sleep(self.request_interval)
             i += 1
+            if j >= review_count / 3 * step_ind:
+                if server is not None:
+                    server.send_message(client, f"step_{3 + step_ind}")
+                step_ind += 1
 
         return results
 

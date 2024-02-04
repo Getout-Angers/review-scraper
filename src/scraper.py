@@ -204,7 +204,7 @@ def add_arguments(data, options):
     headless=True,
     output=None,
 )
-def scrape_places(driver: AntiDetectDriver, data):
+def scrape_places(driver: AntiDetectDriver, data, client=None, server=None):
     # This fixes consent Issues in Countries like Spain
     max_results = data['max']
     is_spending_on_ads = data['is_spending_on_ads']
@@ -289,9 +289,11 @@ def scrape_places(driver: AntiDetectDriver, data):
                             sleep(sleep_time)
     
     search_link = create_search_link(data['query'], data['lang'], data['geo_coordinates'], data['zoom'])
-    print("step_1")
+    if server is not None:
+        server.send_message("step_1")
     perform_visit(driver, search_link)
-    print("step_2")
+    if server is not None:
+        server.send_message("step_2")
     
     set_cookies(driver.get_cookies_dict())
     
@@ -331,7 +333,8 @@ def scrape_places(driver: AntiDetectDriver, data):
 
 
     places = scrape_place_obj.get()
-    print("step_3")
+    if server is not None:
+        server.send_message("step_3")
     hasnone = False
     for place in places:
       if place is None:

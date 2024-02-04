@@ -137,13 +137,6 @@ def merge_sponsored_links(places, sponsored_links):
     return places
 
 def add_arguments(data, options):
-    options.add_experimental_option(
-        "prefs", {
-            "profile.managed_default_content_settings.images": 2,
-            # "profile.managed_default_content_settings.stylesheet": 2,
-            # "profile.managed_default_content_settings.fonts": 2,
-        }
-    )
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--no-sandbox')
 
@@ -214,7 +207,7 @@ def add_arguments(data, options):
     keep_drivers_alive=True, 
     lang=get_lang,
     close_on_crash=True,
-    max_retry = 3,
+    max_retry=3,
     headless=True,
     output=None,
 )

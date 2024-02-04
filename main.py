@@ -19,4 +19,5 @@ with reviews_scraper.GoogleMapsAPIScraper() as r_scraper:
    )
 processed = scraper.process_reviews(result, False)
 print(len(processed))
+print(processed[0])
 print("--- %s seconds ---" % (time.time() - start_time))

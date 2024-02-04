@@ -5,3 +5,7 @@ casefy
 lxml
 regex
 botasaurus
+requests
+mysql-connector-python
+python-dotenv
+websocket-server

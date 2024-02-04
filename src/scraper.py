@@ -192,6 +192,8 @@ def add_arguments(data, options):
                     # "profile.managed_default_content_settings.fonts": 2,
                 }
             )
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--no-sandbox')
 
 @browser(
     # block_resources=[   '.css', '.jpg', '.jpeg', '.png', '.svg', '.gif'],

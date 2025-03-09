@@ -55,7 +55,7 @@ def message_received(client, server, message):
                 },
                 "status": "OK",
             }
-            place_data = {'query': 'Get Out Angers - Escape Game et Expériences Immersives 🔒 | Bar à Jeux 🎲',
+            place_data = {'query': res["option"]["place_name"],
                           'is_spending_on_ads': False, 'max': 1, 'lang': 'fr', 'geo_coordinates': None,
                           'zoom': None, 'convert_to_english': True}
             places_obj = scraper.scrape_places(place_data, cache=True, metadata={'server': server, 'client': client})
